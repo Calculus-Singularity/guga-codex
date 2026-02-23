@@ -74,20 +74,20 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            binary: gugugaga
-            asset_name: gugugaga-x86_64-unknown-linux-gnu
-          - os: macos-13
+            binary: guga-codex
+            asset_name: guga-codex-x86_64-unknown-linux-gnu
+          - os: macos-15-intel
             target: x86_64-apple-darwin
-            binary: gugugaga
-            asset_name: gugugaga-x86_64-apple-darwin
+            binary: guga-codex
+            asset_name: guga-codex-x86_64-apple-darwin
           - os: macos-14
             target: aarch64-apple-darwin
-            binary: gugugaga
-            asset_name: gugugaga-aarch64-apple-darwin
+            binary: guga-codex
+            asset_name: guga-codex-aarch64-apple-darwin
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            binary: gugugaga.exe
-            asset_name: gugugaga-x86_64-pc-windows-msvc.exe
+            binary: guga-codex.exe
+            asset_name: guga-codex-x86_64-pc-windows-msvc.exe
     steps:
       - uses: actions/checkout@v4
         with:
