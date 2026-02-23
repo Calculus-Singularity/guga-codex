@@ -11,6 +11,20 @@ It does not try to replace Codex generation ability. Instead, it adds a second c
 
 When coding conversations get long, fast output alone is not enough. gugugaga focuses on making sessions reviewable, steerable, and resilient: less silent drift, fewer avoidable regressions, and clearer correction signals when model behavior deviates from user intent.
 
+## Install
+
+### Unix (macOS / Linux)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Calculus-Singularity/gugugaga/main/scripts/install.sh | bash
+```
+
+### Windows (PowerShell)
+
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser; irm https://raw.githubusercontent.com/Calculus-Singularity/gugugaga/main/scripts/install.ps1 | iex
+```
+
 ## What This Project Emphasizes
 
 - Continuous supervision on top of normal Codex turn flow.
@@ -20,14 +34,11 @@ When coding conversations get long, fast output alone is not enough. gugugaga fo
 
 ## What Gugugaga Checks
 
-gugugaga focuses on supervision signals that matter in real coding sessions:
+Today, the explicit turn-level supervision taxonomy is:
 
-- Instruction adherence: whether Codex actually follows explicit user constraints, priorities, and format requirements.
-- Scope control: whether the turn stays within the requested task instead of drifting into unrelated work.
-- Tool-use correctness: whether tool calls are necessary, correctly formed, and semantically aligned with the user intent.
-- Completion integrity: whether the agent claims completion too early, skips required verification, or leaves critical steps unhandled.
-- Change safety: whether edits introduce avoidable risk (destructive operations, unsafe assumptions, missing guardrails).
-- Regression risk: whether modifications likely break existing behavior without acknowledgement or validation.
-- Evidence quality: whether conclusions are backed by concrete outputs, diffs, test results, or reproducible checks.
-- UI/behavior alignment: whether visible behavior in the interface matches expected Codex-style interaction semantics.
-- Session consistency: whether long-turn memory and notebook updates remain coherent instead of contradictory or repetitive.
+- `FALLBACK`: Codex refuses or defers instead of attempting the requested task.
+- `IGNORED_INSTRUCTION`: Codex violates an explicit user instruction.
+- `UNAUTHORIZED_CHANGE`: Codex changes unrelated behavior outside requested scope.
+- `UNNECESSARY_INTERACTION`: Codex interrupts autonomous flow with avoidable back-and-forth when user asked to just do it.
+- `OVER_ENGINEERING`: Codex introduces unnecessary architectural complexity for the requested task.
+

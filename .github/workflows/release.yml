@@ -1,0 +1,134 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Release tag (e.g. v0.1.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  prepare-release:
+    name: Prepare Release
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve tag
+        id: tag
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            tag="${{ github.event.inputs.tag_name }}"
+            if [ -z "$tag" ]; then
+              echo "error: tag_name is required for workflow_dispatch" >&2
+              exit 1
+            fi
+          else
+            tag="${GITHUB_REF_NAME}"
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Create and push tag (workflow_dispatch only)
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          tag="${{ steps.tag.outputs.tag }}"
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            echo "Tag $tag already exists."
+          else
+            git tag "$tag"
+            git push origin "$tag"
+          fi
+
+      - name: Create or update release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ steps.tag.outputs.tag }}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release edit "$tag" --title "$tag"
+          else
+            gh release create "$tag" --title "$tag" --generate-notes
+          fi
+
+  build-assets:
+    name: Build ${{ matrix.target }}
+    needs: prepare-release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            binary: gugugaga
+            asset_name: gugugaga-x86_64-unknown-linux-gnu
+          - os: macos-13
+            target: x86_64-apple-darwin
+            binary: gugugaga
+            asset_name: gugugaga-x86_64-apple-darwin
+          - os: macos-14
+            target: aarch64-apple-darwin
+            binary: gugugaga
+            asset_name: gugugaga-aarch64-apple-darwin
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            binary: gugugaga.exe
+            asset_name: gugugaga-x86_64-pc-windows-msvc.exe
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout submodules
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SUBMODULE_TOKEN: ${{ secrets.SUBMODULE_TOKEN }}
+        run: |
+          token="${SUBMODULE_TOKEN:-$GITHUB_TOKEN}"
+          if [ -z "$token" ]; then
+            echo "error: missing token for submodule checkout" >&2
+            exit 1
+          fi
+          git -c url."https://${token}@github.com/".insteadOf=git@github.com: submodule update --init --recursive
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Build release binary
+        shell: bash
+        run: |
+          cargo build \
+            --manifest-path codex/codex-rs/Cargo.toml \
+            -p codex-cli \
+            --release \
+            --target "${{ matrix.target }}"
+
+      - name: Prepare asset file
+        shell: bash
+        run: |
+          src="codex/codex-rs/target/${{ matrix.target }}/release/${{ matrix.binary }}"
+          cp "$src" "${{ matrix.asset_name }}"
+
+      - name: Upload asset
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ needs.prepare-release.outputs.tag }}" "${{ matrix.asset_name }}" --clobber
