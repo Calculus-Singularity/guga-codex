@@ -2,7 +2,7 @@
 
 <div align="center">
   
-**Real-time supervision for Codex — catch drift before it compounds.**
+**A watchdog agent for Codex sessions**
 
 </div>
 
