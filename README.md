@@ -1,8 +1,10 @@
+<div align="center">
+
 # guga-codex
 
 **The supervision layer that keeps Codex sessions safer, sharper, and consistent under real project pressure.**
 
-Built on top of [Calculus-Singularity/codex](https://github.com/Calculus-Singularity/codex) · Rust · TUI
+</div>
 
 ---
 
@@ -24,6 +26,24 @@ curl -fsSL https://raw.githubusercontent.com/Calculus-Singularity/guga-codex/mai
 ```powershell
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser; irm https://raw.githubusercontent.com/Calculus-Singularity/guga-codex/main/scripts/install.ps1 | iex
 ```
+
+## Usage
+
+Just use `guga-codex` the same way you would use Codex. The supervisor runs automatically in the background — it reviews every Codex turn, updates its persistent notebook, and surfaces correction or caution messages directly in the TUI when it detects issues.
+
+### Supervisor chat and commands (`//`-prefixed)
+
+Inside the TUI, prefix a message with `//` to talk directly to the GugaCodex supervisor instead of Codex:
+
+| Command | Description |
+|---|---|
+| `//help` | Show available supervisor commands |
+| `//stats` | Show supervision status for the current session |
+| `//notebook` | Show the supervisor's persistent notebook |
+| `//model` | Open or set the supervisor model |
+| `//clear` | Start a fresh supervisor session |
+
+Any other `//` message (e.g. `//focus on test coverage`) is sent as free-form chat to the supervisor.
 
 ## What This Project Emphasizes
 
