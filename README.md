@@ -43,6 +43,10 @@ Inside the TUI, prefix a message with `//` to talk directly to the GugaCodex sup
 
 Any other `//` message (e.g. `//focus on test coverage`) is sent as free-form chat to the supervisor.
 
+### Local issue tracker (`guga-codex issues`)
+
+guga-codex has a built-in local issue tracker. Run `guga-codex issues init` to set up, and `guga-codex issues --help` to see available commands.
+
 ## What This Project Emphasizes
 
 - Continuous supervision on top of normal Codex turn flow.
@@ -59,4 +63,5 @@ Today, the explicit turn-level supervision taxonomy is:
 - `UNAUTHORIZED_CHANGE`: Codex changes unrelated behavior outside requested scope.
 - `UNNECESSARY_INTERACTION`: Codex interrupts autonomous flow with avoidable back-and-forth when user asked to just do it.
 - `OVER_ENGINEERING`: Codex introduces unnecessary architectural complexity for the requested task.
+- `BYPASSED_ISSUE_TRACKER`: Codex uses built-in TodoWrite or task management instead of `guga-codex issues`.
 
