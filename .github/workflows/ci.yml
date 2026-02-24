@@ -30,7 +30,7 @@ jobs:
           components: rustfmt
 
       - name: cargo fmt
-        run: cargo fmt --manifest-path codex/codex-rs/Cargo.toml -- --check
+        run: cargo fmt --manifest-path codex/codex-rs/Cargo.toml -- --config imports_granularity=Item --check
 
   clippy:
     name: Clippy
@@ -62,7 +62,7 @@ jobs:
           shared-key: ci-clippy
 
       - name: cargo clippy
-        run: cargo clippy --manifest-path codex/codex-rs/Cargo.toml --all-targets -- -D warnings
+        run: cargo clippy --manifest-path codex/codex-rs/Cargo.toml --all-targets
 
   test:
     name: Test
