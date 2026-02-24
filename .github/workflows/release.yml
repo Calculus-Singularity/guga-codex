@@ -106,6 +106,10 @@ jobs:
           fi
           git -c url."https://${token}@github.com/".insteadOf=git@github.com: submodule update --init --recursive
 
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libcap-dev
+
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
