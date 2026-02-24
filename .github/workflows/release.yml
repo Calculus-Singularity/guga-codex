@@ -115,6 +115,12 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
+      - name: Cache cargo registry and build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: codex/codex-rs -> target
+          shared-key: release-${{ matrix.target }}
+
       - name: Build release binary
         shell: bash
         run: |
