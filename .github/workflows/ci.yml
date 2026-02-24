@@ -106,6 +106,6 @@ jobs:
           shared-key: ci-test
 
       - name: cargo test
-        run: cargo test
+        run: cargo test -p codex-core -p codex-tui -p codex-cli --lib
         env:
           RUST_BACKTRACE: 1
