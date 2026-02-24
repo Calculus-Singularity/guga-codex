@@ -1,15 +1,14 @@
-<h1 align="center">guga-codex</h1>
+<h1 align="center">Guga-Codex</h1>
 
 <div align="center">
   
-**The supervision layer that keeps Codex sessions safer, sharper, and consistent under real project pressure.**
+**Real-time supervision for Codex — catch drift before it compounds.**
 
 </div>
 
-guga-codex is a supervision-first Codex project.
-It does not try to replace Codex generation ability. Instead, it adds a second control loop around each turn so behavior, quality, and execution discipline remain stable across long sessions.
+The longer a Codex session runs, the more it quietly goes off the rails: skipped instructions, unauthorized edits, unnecessary abstractions. You don't notice until you're deep in a broken diff.
 
-When coding conversations get long, fast output alone is not enough. guga-codex focuses on making sessions reviewable, steerable, and resilient: less silent drift, fewer avoidable regressions, and clearer correction signals when model behavior deviates from user intent.
+guga-codex is a real-time supervisor that catches these on every turn — before they compound. It doesn't replace Codex's generation ability. It watches each turn, flags deviations the moment they happen, and surfaces corrections directly in the TUI so you can steer instead of clean up.
 
 ## Install
 
