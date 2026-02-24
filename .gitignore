@@ -39,3 +39,12 @@ tmp/
 temp/
 *.tmp
 .issues/
+
+# Manim render output
+media/
+
+# Animation source files (only GIF is committed)
+assets/*.py
+assets/*.png
+assets/*.svg
+assets/__pycache__/

@@ -10,6 +10,10 @@ The longer a Codex session runs, the more it quietly goes off the rails: skipped
 
 guga-codex is a real-time supervisor that catches these on every turn — before they compound. It doesn't replace Codex's generation ability. It watches each turn, flags deviations the moment they happen, and surfaces corrections directly in the TUI so you can steer instead of clean up.
 
+<p align="center">
+  <img src="assets/drift_comparison.gif" alt="Codex session drift comparison — without vs with guga-codex supervision" width="720" />
+</p>
+
 ## Install
 
 ### Unix (macOS / Linux)
