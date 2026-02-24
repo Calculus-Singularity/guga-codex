@@ -13,11 +13,15 @@ jobs:
     name: Format
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: codex/codex-rs
     steps:
       - uses: actions/checkout@v4
 
       - name: Checkout submodules
         shell: bash
+        working-directory: .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SUBMODULE_TOKEN: ${{ secrets.SUBMODULE_TOKEN }}
@@ -30,17 +34,21 @@ jobs:
           components: rustfmt
 
       - name: cargo fmt
-        run: cargo fmt --manifest-path codex/codex-rs/Cargo.toml -- --check
+        run: cargo fmt -- --check
 
   clippy:
     name: Clippy
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: codex/codex-rs
     steps:
       - uses: actions/checkout@v4
 
       - name: Checkout submodules
         shell: bash
+        working-directory: .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SUBMODULE_TOKEN: ${{ secrets.SUBMODULE_TOKEN }}
@@ -49,6 +57,7 @@ jobs:
           git -c url."https://${token}@github.com/".insteadOf=git@github.com: submodule update --init --recursive
 
       - name: Install Linux build dependencies
+        working-directory: .
         run: sudo apt-get update && sudo apt-get install -y libcap-dev
 
       - uses: dtolnay/rust-toolchain@stable
@@ -62,17 +71,21 @@ jobs:
           shared-key: ci-clippy
 
       - name: cargo clippy
-        run: cargo clippy --manifest-path codex/codex-rs/Cargo.toml -p codex-core -p codex-tui -p codex-cli --all-targets
+        run: cargo clippy -p codex-core -p codex-tui -p codex-cli --all-targets
 
   test:
     name: Test
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: codex/codex-rs
     steps:
       - uses: actions/checkout@v4
 
       - name: Checkout submodules
         shell: bash
+        working-directory: .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SUBMODULE_TOKEN: ${{ secrets.SUBMODULE_TOKEN }}
@@ -81,6 +94,7 @@ jobs:
           git -c url."https://${token}@github.com/".insteadOf=git@github.com: submodule update --init --recursive
 
       - name: Install Linux build dependencies
+        working-directory: .
         run: sudo apt-get update && sudo apt-get install -y libcap-dev
 
       - uses: dtolnay/rust-toolchain@stable
@@ -92,6 +106,6 @@ jobs:
           shared-key: ci-test
 
       - name: cargo test
-        run: cargo test --manifest-path codex/codex-rs/Cargo.toml
+        run: cargo test
         env:
           RUST_BACKTRACE: 1
