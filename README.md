@@ -1,12 +1,10 @@
+<h1 align="center">guga-codex</h1>
+
 <div align="center">
-
-# guga-codex
-
+  
 **The supervision layer that keeps Codex sessions safer, sharper, and consistent under real project pressure.**
 
 </div>
-
----
 
 guga-codex is a supervision-first Codex project.
 It does not try to replace Codex generation ability. Instead, it adds a second control loop around each turn so behavior, quality, and execution discipline remain stable across long sessions.
